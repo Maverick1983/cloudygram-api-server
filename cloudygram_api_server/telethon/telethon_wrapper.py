@@ -1,5 +1,6 @@
 from email.mime import base
 from gc import callbacks
+from unittest import result
 from attr import attr
 from cloudygram_api_server.models.asyncronous.base_response import BaseResponse
 from cloudygram_api_server.telethon.exceptions import TTUnathorizedException, TTGenericException, TTSignInException, TTFileTransferException
@@ -281,4 +282,11 @@ async def get_dialog(phone_number: str) -> dict:
         result = []
         async for dialog in client.iter_dialogs(archived=False):
             result.append({'id': dialog.id, 'title': dialog.title})
+    return result
+
+async def read_chat(phone_number: str, chat: str) -> dict:
+    async with Client(phone_number) as client:
+        result = []
+        async for message in client.iter_messages(int(chat)):
+            result.append({'date': message.date ,'id': message.id, 'testo': message.text})
     return result

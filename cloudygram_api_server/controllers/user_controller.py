@@ -1,6 +1,7 @@
 from email.policy import HTTP
 from http.client import OK
 from operator import truediv
+from unittest import result
 from cloudygram_api_server.models.asyncronous.user_model import *
 from cloudygram_api_server.models.asyncronous.base_response import BaseResponse, BaseResponseData
 from cloudygram_api_server.payload_keys import telegram_keys, download_keys, file_keys
@@ -168,6 +169,15 @@ class UserController:
     async def contacts_req(phonenumber: str, response: Response):
         try:
             result = await get_dialog(phonenumber)
+        except Exception as exc:
+            response.status_code = handle_exception(str(exc))
+            return BaseResponse(isSuccess=False, message=str(exc))
+        return {"isSuccess":True, "data":result}
+
+    @router.get("/{phonenumber}/readChat")
+    async def read_caht(phonenumber: str, chat: str, response: Response):
+        try:
+            result = await read_chat(phonenumber, chat)
         except Exception as exc:
             response.status_code = handle_exception(str(exc))
             return BaseResponse(isSuccess=False, message=str(exc))
