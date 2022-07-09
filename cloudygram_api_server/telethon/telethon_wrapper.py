@@ -1,7 +1,5 @@
 from email.mime import base
 from gc import callbacks
-import imp
-
 from attr import attr
 from cloudygram_api_server.models.asyncronous.base_response import BaseResponse
 from cloudygram_api_server.telethon.exceptions import TTUnathorizedException, TTGenericException, TTSignInException, TTFileTransferException
