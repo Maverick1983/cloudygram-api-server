@@ -28,7 +28,7 @@ class UserController:
         return user
 
     @router.post("/{phonenumber}/uploadFile")
-    async def upload_file_req(phonenumber: str, file: UploadFile, response: Response, mimeType: str = Form(), chatid: str = Form()):
+    async def upload_file_req(phonenumber: str, file: UploadFile, response: Response, mimeType: str = Form(), chatid: str = Form(default=0)):
         response.headers["Content-Type"] = "application/json"
         phone_number = phonenumber
         file_stream = file

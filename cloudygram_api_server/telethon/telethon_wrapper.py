@@ -145,36 +145,41 @@ async def get_me(phone_number: str) -> User:
 
 async def upload_file(phone_number: str, file_name: str, file_stream: BytesIO, mime_type: str, chatid: int = 0):
     async with Client(phone_number) as client:
-        if (chatid == 0):
-            uploaded_file = await client.upload_file(file=file_stream)
-        
-            me: User = await client.get_me()
-
-            media = types.InputMediaUploadedDocument(
-                file=uploaded_file,
-                stickers=[types.InputDocument(
-                    id=uploaded_file.id,
-                    access_hash=uploaded_file.id,
-                    file_reference=INITIAL_FILE_REF
-                )],
-                ttl_seconds=100,
-                mime_type=mime_type,
-                attributes=[
-                    DocumentAttributeFilename(file_name)
-                ]
-            )
-
+        #if (chatid == 0):
+        #    uploaded_file = await client.upload_file(file=file_stream)
+        #
+        #    me: User = await client.get_me()
+#
+        #    media = types.InputMediaUploadedDocument(
+        #        file=uploaded_file,
+        #        stickers=[types.InputDocument(
+        #            id=uploaded_file.id,
+        #            access_hash=uploaded_file.id,
+        #            file_reference=INITIAL_FILE_REF
+        #        )],
+        #        ttl_seconds=100,
+        #        mime_type=mime_type,
+        #        attributes=[
+        #            DocumentAttributeFilename(file_name)
+        #        ]
+        #    )
+#
+        #    try:
+        #        updates: UpdateShortMessage = await client(functions.messages.SendMediaRequest(
+        #            peer=me,
+        #            media=media,
+        #            message="document id: " + str(media.stickers[0].id)
+        #        ))
+        #    except Exception as e:
+        #        raise TTFileTransferException(str(e))
+        #else:
             try:
-                updates: UpdateShortMessage = await client(functions.messages.SendMediaRequest(
-                    peer=me,
-                    media=media,
-                    message="document id: " + str(media.stickers[0].id)
-                ))
-            except Exception as e:
-                raise TTFileTransferException(str(e))
-        else:
-            try:
-                updates: telethon.tl.custom.message.Message = await client.send_file(entity = int(chatid), 
+                if (chatid == 0):
+                    me = await client.get_me()
+                else:
+                    me = int(chatid)
+
+                updates: telethon.tl.custom.message.Message = await client.send_file(entity = me, 
                         file=file_stream, 
                         attributes=[DocumentAttributeFilename(file_name)])
             except Exception as e:
