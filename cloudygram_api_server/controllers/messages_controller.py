@@ -4,6 +4,7 @@ from typing import List, Union
 from cloudygram_api_server.models.asyncronous.base_response import BaseResponse, BaseResponseData
 from fastapi import APIRouter, Response, status, UploadFile, Form, Body
 from fastapi.encoders import jsonable_encoder
+from cloudygram_api_server.models.asyncronous.user_model import MessagesDelete
 
 class MessagesController(object):
     router = APIRouter()
@@ -19,8 +20,8 @@ class MessagesController(object):
         return BaseResponse(isSuccess=False, message=result)
 
     @router.post("/{phonenumber}/deleteMessages")
-    async def delete_messages_req(phonenumber: str, response: Response, ids: List[str] = Body()):
-        message_ids = ids
+    async def delete_messages_req(phonenumber: str, response: Response, ids: MessagesDelete):
+        message_ids = ids.ids
         try:
             await delete_messages(phonenumber, message_ids)
         except Exception as exc:

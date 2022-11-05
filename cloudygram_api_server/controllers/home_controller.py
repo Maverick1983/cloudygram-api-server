@@ -15,13 +15,13 @@ class HomeController(object):
     router = APIRouter()
 
     @router.get("/sendCode")
-    async def send_code_req(phonenumber: str, response: Response):
+    async def send_code_req(phoneNumber: str, response: Response):
         try:
-            result = await send_code(phonenumber)
+            result = await send_code(phoneNumber)
         except Exception as exc:
             response.status_code = handle_exception(str(exc))
             return BaseResponse(isSuccess=False, message=str(exc))
-        return HomeResponse(isSuccess=True, sendCode=result)
+        return HomeResponse(isSuccess=True, sentCode=result)
 
 
     @router.post("/signin")
@@ -29,7 +29,7 @@ class HomeController(object):
                         phoneNumber: str = Body(), 
                         phoneCodeHash: str = Body(), 
                         phoneCode: str = Body(), 
-                        password: str = Body()):
+                        password: str = Body(None)):
         try:
             result = await signin(
                         phoneNumber,
