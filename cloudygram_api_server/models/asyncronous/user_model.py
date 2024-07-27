@@ -2,6 +2,7 @@ from pydantic import BaseModel
 from telethon.tl.types import User
 from typing import Optional
 from cloudygram_api_server.models.asyncronous.base_response import BaseResponse
+from typing import List
 
 class UserData(BaseModel):
     userId : Optional[str]
@@ -28,3 +29,6 @@ def set_value(isSuccess: bool, UserDetails: User = None, message: str = None) ->
         user.message = message
     
     return user
+
+class MessagesDelete(BaseModel):
+    ids: List[str]
